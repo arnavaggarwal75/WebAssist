@@ -26,8 +26,8 @@ llm = OpenAI(temperature=0)
 
 # Split the document into chunks
 text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=2500,
-    chunk_overlap=400
+    chunk_size=1800,
+    chunk_overlap=350
 )
 chunks = text_splitter.split_documents(document)
 
@@ -44,27 +44,19 @@ QA_chain = RetrievalQA.from_chain_type(
 
 class FlashcardOutput(BaseModel):
         points: List[str] = Field(
-            description="List of points for flashcards"
+            description="List of key points"
         )
 
-        @validator('points', each_item=True)
-        def end_with_dot(cls, info):
-            for idx, item in enumerate(info):
-                if item[-1] != ".":
-                    info[idx] = info[idx][:-1]
-            return info
-
-
 def summarize_content(num_words):
-    return QA_chain.invoke(f"generate a summary of this webpage content in roughly {num_words} words")
+    return (QA_chain.invoke(f"generate a summary of this document in roughly {num_words} words"))["result"]
 
 def flashcards():
     my_parser = PydanticOutputParser(
         pydantic_object=FlashcardOutput
     )
     prompt_template = """
-    Offer a list of key points from this webpage content and ensure 
-    that these points are not too long.
+    Summarize the document in terms of key points which 
+    we will display on flashcards later.
 
     {format_instructions}
     """
@@ -76,11 +68,24 @@ def flashcards():
     )
     formatted_prompt = my_prompt.format_prompt()
     output = QA_chain.invoke(formatted_prompt.to_string())
-    print(output)
+    
+    parsed_output = my_parser.parse(output["result"])
+    points_list = parsed_output.points
 
-    return my_parser.parse(output)
+    return [item.rstrip(".") for item in points_list]
 
-def important_lines():
-    pass
+def answer_question(ques):
+    return (QA_chain.invoke(f'''
+    Answer the following question with reference to the this document:
+    {ques}'''))["result"]
 
-flashcards()
+# Testing the functions
+print("Summary:")
+print(summarize_content(100))  
+
+print("\nFlashcards:")
+for item in flashcards():
+     print(item)
+
+print("\nAnswer Question:")
+print(answer_question("How did the word car origniate?"))
