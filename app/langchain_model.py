@@ -18,17 +18,19 @@ from langchain.chains.llm import LLMChain
 _ = load_dotenv(find_dotenv())
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
-current_file_path = os.path.dirname(__file__)
-# Resolve the path to data.txt
-data_file_path = os.path.join(current_file_path, 'data.txt')
-
-loader = TextLoader(data_file_path)
-document = loader.load()
-
 # Initialize the LLM with the API key
 llm = ChatOpenAI(temperature=0, model="gpt-4o")
 
+def load_doc():
+    current_file_path = os.path.dirname(__file__)
+    data_file_path = os.path.join(current_file_path, 'data.txt')
+    loader = TextLoader(data_file_path)
+    document = loader.load()
+    return document
+
 def summarize_content(num_words):
+    document = load_doc()
+
     prompt_template = '''generate a summary of the following text in roughly {num} words:
                         "{text}"
                         '''
@@ -52,6 +54,8 @@ class FlashcardOutput(BaseModel):
     )
 
 def flashcards():
+    document = load_doc()
+
     my_parser = PydanticOutputParser(
         pydantic_object=FlashcardOutput
     )
@@ -88,6 +92,8 @@ class ImpLines(BaseModel):
     )
 
 def extract_important_lines():
+    document = load_doc()
+
     my_parser = PydanticOutputParser(
         pydantic_object=ImpLines
     )
@@ -127,6 +133,8 @@ def extract_important_lines():
     return lines_list
 
 def answer_question(ques):
+    document = load_doc()
+    
     # Split the document into chunks
     text_splitter = RecursiveCharacterTextSplitter(
         separators = ["\n\n", "\n", " ", ""],    
@@ -163,4 +171,4 @@ def answer_question(ques):
 #     print(line)
 
 # print("\nAnswer Question:")
-# print(answer_question("what is the best selling car of all time?"))
+# print(answer_question("How does the OED define a mummy?"))

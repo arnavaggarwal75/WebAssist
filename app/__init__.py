@@ -3,8 +3,6 @@ from flask_cors import CORS
 from .routes import setup_routes
 from dotenv import load_dotenv, find_dotenv
 
-
-
 def create_app():
     load_dotenv(find_dotenv())
     app = Flask(__name__)
