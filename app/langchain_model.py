@@ -25,35 +25,23 @@ document = loader.load()
 # Initialize the LLM with the API key
 llm = ChatOpenAI(temperature=0, model="gpt-4o")
 
-# Split the document into chunks
-text_splitter = RecursiveCharacterTextSplitter(
-    separators = ["\n\n", "\n", " ", ""],    
-    chunk_size = 1600,
-    chunk_overlap= 200
-)
-chunks = text_splitter.split_documents(document)
-
-
-# Perform embedding using FAISS
-embeddings = OpenAIEmbeddings()
-vector_db = FAISS.from_documents(chunks, embeddings)
-
-QA_chain = RetrievalQA.from_chain_type(
-    llm=llm,
-    chain_type="stuff",
-    retriever=vector_db.as_retriever()
-)
-
 def summarize_content(num_words):
-    # messages = [
-    # ("system",
-    #     "You are responsible for summarizing a document",
-    # ),
-    # ("human", 
-    #     f"generate a summary of this document in roughly {num_words} words"),
-    # ]
-    response = QA_chain.invoke(f"generate a summary of this document in roughly {num_words} words")
-    return response["result"]
+    prompt_template = '''generate a summary of the following text in roughly {num} words:
+                        "{text}"
+                        '''
+
+    my_prompt = PromptTemplate(
+        template=prompt_template,
+        input_variables={"num"}
+    )
+
+    llm_chain = LLMChain(llm=llm, prompt=my_prompt)
+
+    # Define StuffDocumentsChain
+    stuff_chain = StuffDocumentsChain(llm_chain=llm_chain, document_variable_name="text")
+    response = stuff_chain.invoke({"input_documents": document, "num": num_words})
+
+    return response["output_text"]
 
 class FlashcardOutput(BaseModel):
     points: List[str] = Field(
@@ -64,10 +52,13 @@ def flashcards():
     my_parser = PydanticOutputParser(
         pydantic_object=FlashcardOutput
     )
+
     prompt_template = """
-    Summarize the document in terms of key points which 
+    Summarize the following text in terms of key points which 
     we will display on flashcards later. Make sure the 
     points aren't too long.
+
+    "{text}" 
 
     {format_instructions}
     """
@@ -77,17 +68,16 @@ def flashcards():
             "format_instructions": my_parser.get_format_instructions()
         }
     )
-    formatted_prompt = my_prompt.format_prompt()
-    output = QA_chain.invoke(formatted_prompt.to_string())
 
-    parsed_output = my_parser.parse(output["result"])
+    llm_chain = LLMChain(llm=llm, prompt=my_prompt)
+
+    # Define StuffDocumentsChain
+    stuff_chain = StuffDocumentsChain(llm_chain=llm_chain, document_variable_name="text")
+    output = stuff_chain.invoke(document)
+
+    parsed_output = my_parser.parse(output["output_text"])
     points_list = parsed_output.points
     return [item.rstrip(".") for item in points_list]
-
-def answer_question(ques):
-    return (QA_chain.invoke(f'''
-    Answer the following question with reference to the this document:
-    {ques}'''))["result"]
 
 class ImpLines(BaseModel):
     lines: List[str] = Field(
@@ -133,6 +123,29 @@ def extract_important_lines():
     lines_list = parsed_output.lines
     return lines_list
 
+def answer_question(ques):
+    # Split the document into chunks
+    text_splitter = RecursiveCharacterTextSplitter(
+        separators = ["\n\n", "\n", " ", ""],    
+        chunk_size = 1600,
+        chunk_overlap= 200
+    )
+    chunks = text_splitter.split_documents(document)
+
+    # Perform embedding using FAISS
+    embeddings = OpenAIEmbeddings()
+    vector_db = FAISS.from_documents(chunks, embeddings)
+
+    QA_chain = RetrievalQA.from_chain_type(
+        llm=llm,
+        chain_type="stuff",
+        retriever=vector_db.as_retriever()
+    )
+
+    return (QA_chain.invoke(f'''
+    Answer the following question with reference to the this document:
+    {ques}'''))["result"]
+
 
 # Testing the functions
 # print("Summary:")
@@ -142,9 +155,9 @@ def extract_important_lines():
 # for item in flashcards():
 #      print(item)
 
-# print("\nAnswer Question:")
-# print(answer_question("Which module does this documentation pertain to?"))
-
 # print("Impoortant Lines:")
 # for line in extract_important_lines():
 #     print(line)
+
+# print("\nAnswer Question:")
+# print(answer_question("what is the best selling car of all time?"))
