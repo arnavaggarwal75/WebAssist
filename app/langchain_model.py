@@ -18,8 +18,11 @@ from langchain.chains.llm import LLMChain
 _ = load_dotenv(find_dotenv())
 openai_api_key = os.getenv("OPENAI_API_KEY")
 
+current_file_path = os.path.dirname(__file__)
+# Resolve the path to data.txt
+data_file_path = os.path.join(current_file_path, 'data.txt')
 
-loader = TextLoader("./data.txt")
+loader = TextLoader(data_file_path)
 document = loader.load()
 
 # Initialize the LLM with the API key
