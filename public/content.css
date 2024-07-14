@@ -1,39 +1,39 @@
 .highColorYellow {
-    background-color: rgba(255, 255, 0, 0.4); /* Yellow with 40% opacity */
-  }
-  
-  .highColorGreen {
-    background-color: rgba(0, 255, 0, 0.4); /* Green with 40% opacity */
-  }
-  
-  .highColorCyan {
-    background-color: rgba(0, 255, 255, 0.4); /* Cyan with 40% opacity */
-  }
-  
-  .highColorMagenta {
-    background-color: rgba(255, 0, 255, 0.4); /* Magenta with 40% opacity */
-  }
-  
-  .highColorOrange {
-    background-color: rgba(255, 165, 0, 0.4); /* Orange with 40% opacity */
-  }
-  
-  .highColorPink {
-    background-color: rgba(255, 192, 203, 0.4); /* Pink with 40% opacity */
-  }
-  
-  .highColorLightBlue {
-    background-color: rgba(173, 216, 230, 0.4); /* Light Blue with 40% opacity */
-  }
-  
-  .highColorLavender {
-    background-color: rgba(230, 230, 250, 0.4); /* Lavender with 40% opacity */
-  }
-  
-  .highColorPeach {
-    background-color: rgba(255, 218, 185, 0.4); /* Peach with 40% opacity */
-  }
-  
-  .highColorMint {
-    background-color: rgba(189, 252, 201, 0.4); /* Mint with 40% opacity */
-  }
+  background-color: rgb(253 224 71);; /* Tailwind yellow-300 with 40% opacity */
+}
+
+.highColorGreen {
+  background-color: rgb(34 197 94); /* Tailwind green-300 with 40% opacity */
+}
+
+.highColorCyan {
+  background-color: rgb(34 211 238);; /* Tailwind cyan-300 with 40% opacity */
+}
+
+.highColorGray {
+  background-color: rgb(156 163 175); /* Tailwind gray-400 with 40% opacity */
+}
+
+.highColorOrange {
+  background-color: rgb(251 146 60); /* Tailwind orange-300 with 40% opacity */
+}
+
+.highColorPink {
+  background-color: rgb(244 114 182); /* Tailwind pink-300 with 40% opacity */
+}
+
+.highColorBlue {
+  background-color: rgb(59 130 246); /* Tailwind blue-500 with 40% opacity */
+}
+
+.highColorPurple {
+  background-color: rgb(168 85 247); /* Tailwind purple-500 with 40% opacity */
+}
+
+.highColorRose {
+  background-color: rgb(251 113 133);  /* Tailwind rose-400 with 40% opacity */
+}
+
+.highColorTeal {
+  background-color: rgb(20 184 166); /* Tailwind teal-500 with 40% opacity */
+}

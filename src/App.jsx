@@ -4,6 +4,7 @@ import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./integrals/home";
 import ChatBot from "./integrals/ChatBot";
 import Flashcards from "./integrals/Flashcards";
+import MultiHighlight from "./integrals/MultiHighlight";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/chatbot" element={<ChatBot />} />
         <Route path="/flashcards" element={<Flashcards />} />
+        <Route path="/multiHighlight" element={<MultiHighlight />} />
       </Routes>
     </Router>
   );

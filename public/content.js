@@ -24,7 +24,19 @@
 //   };
   
 //   checkBackendConnection();
-
+const initialColors = [
+  "yellow",
+  "green",
+  "cyan",
+  "gray",
+  "orange",
+  "pink",
+  "blue",
+  "purple",
+  "rose",
+  "teal",
+];
+chrome.storage.local.set({ highlightedWords: [], availableColors: initialColors });
 
 const messagesFromReactAppListener = (message, sender, response) => {
 
@@ -38,8 +50,11 @@ const messagesFromReactAppListener = (message, sender, response) => {
       response(pageText);
     }
 
-    if (sender.id === chrome.runtime.id && message.from === "react" && message.message === 'highlight yellow') {
-      const searchTerm = "mummie";
+
+    if (sender.id === chrome.runtime.id && message.from === "react" && message.message.startsWith("highlight")) {
+      let splits = message.message.split(" ");
+      const searchTerm = splits[1];
+      const className = "highColor" + splits[2].charAt(0).toUpperCase() + splits[2].slice(1);
       const searchTermRegex = new RegExp(searchTerm, 'gi'); // 'g' for global match and 'i' for case insensitive
       
       // Function to recursively traverse and highlight text nodes
@@ -48,7 +63,7 @@ const messagesFromReactAppListener = (message, sender, response) => {
           const matches = node.nodeValue.match(searchTermRegex);
           if (matches) {
             const span = document.createElement('span');
-            span.innerHTML = node.nodeValue.replace(searchTermRegex, (match) => `<span class="highColorYellow">${match}</span>`);
+            span.innerHTML = node.nodeValue.replace(searchTermRegex, (match) => `<span class=${className}>${match}</span>`);
             node.parentNode.replaceChild(span, node);
           }
         } else {
@@ -59,18 +74,23 @@ const messagesFromReactAppListener = (message, sender, response) => {
       }
     
       highlightTextNodes(document.body);
+      response("Done")
     }
 
-    if (sender.id === chrome.runtime.id && message.from === "react" && message.message === 'unhighlight yellow') {
-      const highlightedElements = document.querySelectorAll('span.highColorYellow');
+    if (sender.id === chrome.runtime.id && message.from === "react" && message.message.startsWith("unhighlight")) {
+      let splits = message.message.split(" ");
+      const className = "highColor" + splits[1].charAt(0).toUpperCase() + splits[1].slice(1);
+      const highlightedElements = document.querySelectorAll(`span.${className}`);
       
       highlightedElements.forEach(element => {
         const parent = element.parentNode;
         parent.replaceChild(document.createTextNode(element.innerText), element);
         parent.normalize(); // Merge adjacent text nodes
       });
+
+      response("Done")
     }
-  }
+}
 chrome.runtime.onMessage.addListener(messagesFromReactAppListener);
 
 
