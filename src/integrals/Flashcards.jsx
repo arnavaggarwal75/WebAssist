@@ -12,22 +12,22 @@ const Flashcards = () => {
 
   useEffect(() => {
     const fetchFlashcards = async () => {
-      setTimeout(() => {
-        setFlashcards(['vsiuvnefiouwnvioewvnuiewnrvnewuivnriuevbiquribqiurvbvsiuvnefiouwnvioewvnuiewnrvnewuivnriuevbiquribqiurvbvsiuvnefiouwnvioewvnuiewnrvnewuivnriuevbiquribqiurvb', 'vsiuvnefiouwnvioewvnuiewnrvnewuivnriuevbiquribqiurvb', 'vsiuvnefiouwnvioewvnuiewnrvnewuivnriuevbiquribqiurvb'])
-      }, 1000);
+      // setTimeout(() => {
+      //   setFlashcards(['hello i am arav aggarwal and i am a very good boy hiw do you do perosnlay ,kgh', 'vsiuvnefiouwnvioewvnuiewnrvnewuivnriuevbiquribqiurvb', 'vsiuvnefiouwnvioewvnuiewnrvnewuivnriuevbiquribqiurvb'])
+      // }, 1000);
 
-      // const content = await getWebPageContent();
-      // const data = {
-      //   content: content
-      // };
+      const content = await getWebPageContent();
+      const data = {
+        content: content
+      };
     
-      // axios.post('http://127.0.0.1:5000/flashcards', data)
-      //   .then(response => {
-      //     setFlashcards(response.data);  // With axios, the JSON is already parsed
-      //   })
-      //   .catch(error => {
-      //     window.alert('Error:', error);
-      //   });
+      axios.post('http://127.0.0.1:5000/flashcards', data)
+        .then(response => {
+          setFlashcards(response.data);  // With axios, the JSON is already parsed
+        })
+        .catch(error => {
+          window.alert('Error:', error);
+        });
     };
     fetchFlashcards();
   }, []);
