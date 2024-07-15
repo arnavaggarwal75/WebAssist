@@ -82,3 +82,11 @@ export const loadStateFromStorage = (key, callback) => {
     callback(result[key]);
   });
 };
+
+export const speak = (text) => {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+  } else {
+    window.alert('Text-to-Speech not supported in this browser.');
+  }
+};

@@ -21,6 +21,7 @@ const MultiHighlight = () => {
   const [words, setWords] = useState([]);
   const [availableColors, setAvailableColors] = useState(initialColors);
   
+  // To preserve state of extension during session
   useEffect(() => {
     loadStateFromStorage('highlightedWords', (savedWords) => {
       if (savedWords) setWords(savedWords);
@@ -34,7 +35,6 @@ const MultiHighlight = () => {
     saveStateToStorage('highlightedWords', words);
     saveStateToStorage('availableColors', availableColors);
   }, [words, availableColors]);
-
 
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/navbar';
-import { CheckCircleIcon } from '@heroicons/react/outline';
+import { ArrowCircleDownIcon } from '@heroicons/react/outline';
 import TextDisplay from '../components/TextDisplay';
-import { getWebPageContent } from '../utils';
+import { getWebPageContent, saveStateToStorage, loadStateFromStorage, speak } from '../utils';
 import axios from 'axios';
 import { ThreeDots } from 'react-loader-spinner';
 
@@ -11,10 +11,34 @@ const Summary = () => {
   const [responseData, setResponseData] = useState(""); // To store response data
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [isSubmitted, setSubmitted] = useState(false);
+  const [isLoadedFromStorage, setLoadedFromStorage] = useState(false);
+
+  // To preserve state of extension during session
+  useEffect(() => {
+    loadStateFromStorage('summaryInputValue', (summaryInputValue) => {
+      if (summaryInputValue) setInputValue(summaryInputValue);
+    });
+    loadStateFromStorage('summaryResponseValue', (summaryResponseValue) => {
+      if (summaryResponseValue) {
+        setResponseData(summaryResponseValue);
+        setLoadedFromStorage(true);
+      } 
+    });
+    loadStateFromStorage('summaryWasSubmitted', (summaryWasSubmitted) => {
+      if (summaryWasSubmitted) setSubmitted(summaryWasSubmitted);
+    });
+  }, []);
+
+  useEffect(() => {
+    saveStateToStorage('summaryInputValue', inputValue);
+    saveStateToStorage('summaryResponseValue', responseData);
+    saveStateToStorage('summaryWasSubmitted', isSubmitted);
+  }, [inputValue, responseData, isSubmitted]);  
 
   const handleUserInput = async () => {
     setSubmitted(true);
     setIsLoading(true);
+    setLoadedFromStorage(false);
 
     const content = await getWebPageContent();
     const data = {
@@ -54,7 +78,7 @@ const Summary = () => {
             className="p-2 rounded-r-lg bg-white text-blue-700 font-extrabold text-xl"
             onClick={handleUserInput}
           >
-            <CheckCircleIcon className='h-5 w-5'/>
+            <ArrowCircleDownIcon className='h-5 w-5'/>
           </button>
         </div>
         
@@ -65,7 +89,7 @@ const Summary = () => {
                 <ThreeDots width = "40" height = "40" color = '#ffffff'/>
               </div>
             ) : (
-              <TextDisplay content={responseData} />
+              <TextDisplay content={responseData} animate={!isLoadedFromStorage} />
             )
           )
         }

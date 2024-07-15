@@ -1,29 +1,4 @@
-// const checkBackendConnection = () => {
-//     const content = document.body.innerText;
-//     const num_words = 100
-  
-//     fetch('http://127.0.0.1:5000/summarize', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify({ content, num_words })
-//     })
-//     .then(response => {
-//       if (!response.ok) {
-//         throw new Error('Network response was not ok');
-//       }
-//       return response.json();
-//     })
-//     .then(data => {
-//       console.log('Fetched response:', data); // Log the fetched data to the console
-//     })
-//     .catch(error => {
-//       window.alert('There was a problem with the fetch operation: ' + error.message);
-//     });
-//   };
-  
-//   checkBackendConnection();
+// To reset extension's state on new session
 const initialColors = [
   "yellow",
   "green",
@@ -36,7 +11,9 @@ const initialColors = [
   "rose",
   "teal",
 ];
-chrome.storage.local.set({ highlightedWords: [], availableColors: initialColors });
+chrome.storage.local.set({ highlightedWords: [], availableColors: initialColors, 
+            chatInputValue: "", chatResponseValue: "", chatWasSubmitted: false,
+            summaryInputValue: "", summaryResponseValue:"", summaryWasSubmitted: false});
 
 const messagesFromReactAppListener = (message, sender, response) => {
 
