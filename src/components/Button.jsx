@@ -58,7 +58,7 @@
 import React, { useRef, useEffect } from 'react';
 import "../App.css";
 
-function Button({ text, fn = () => {}}) {
+function Button({ text }) {
   const buttonRef = useRef(null);
 
   useEffect(() => {
@@ -97,7 +97,6 @@ function Button({ text, fn = () => {}}) {
     <button
       ref={buttonRef}
       className="bg-slate-100 text-gray-900 p-4 m-2 w-[260px] h-[60px] font-extrabold font-Quicksand text-lg rounded-lg transition-transform"
-      onClick={fn}
     >
       {text}
     </button>

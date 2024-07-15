@@ -1,6 +1,7 @@
 import { getColorClass, sendMsg, saveStateToStorage, loadStateFromStorage } from "../utils";
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/navbar";
+import { PlusCircleIcon, ExclamationIcon} from '@heroicons/react/outline';
 
 const MultiHighlight = () => {
   const initialColors = [
@@ -103,7 +104,7 @@ const MultiHighlight = () => {
             className="p-2 rounded-r-lg bg-white text-blue-700 font-extrabold text-xl"
             onClick={addWord}
           >
-            +
+            <PlusCircleIcon className='h-5 w-5'/>
           </button>
         </div>
 
@@ -128,7 +129,7 @@ const MultiHighlight = () => {
 
         {showPopup && (
         <div className="fixed top-6 left-0 right-0 mx-auto w-3/4 bg-red-600 text-white p-1 text-center font-bold text-xs">
-            {error}
+            <ExclamationIcon className='h-4 w-4 inline-block mr-2'/> {error}
         </div>
         )}
 
