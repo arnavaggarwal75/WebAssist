@@ -22,8 +22,7 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 llm = ChatOpenAI(temperature=0, model="gpt-4o")
 
 def load_doc():
-    current_file_path = os.path.dirname(__file__)
-    data_file_path = os.path.join(current_file_path, 'data.txt')
+    data_file_path = 'data.txt'
     loader = TextLoader(data_file_path)
     document = loader.load()
     return document

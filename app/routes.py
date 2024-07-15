@@ -1,12 +1,10 @@
 from flask import request, jsonify
 from .langchain_model import *
-import os
 
 def setup_routes(app):
 
     def save_content(content):
-        current_file_path = os.path.dirname(__file__)
-        data_file_path = os.path.join(current_file_path, 'data.txt')
+        data_file_path = 'data.txt'
         with open(data_file_path, 'w') as file:
             file.write(content)
 
