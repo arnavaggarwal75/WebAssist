@@ -12,10 +12,6 @@ const Flashcards = () => {
 
   useEffect(() => {
     const fetchFlashcards = async () => {
-      // setTimeout(() => {
-      //   setFlashcards(['hello i am arav aggarwal and i am a very good boy hiw do you do perosnlay ,kgh', 'vsiuvnefiouwnvioewvnuiewnrvnewuivnriuevbiquribqiurvb', 'vsiuvnefiouwnvioewvnuiewnrvnewuivnriuevbiquribqiurvb'])
-      // }, 1000);
-
       const content = await getWebPageContent();
       const data = {
         content: content

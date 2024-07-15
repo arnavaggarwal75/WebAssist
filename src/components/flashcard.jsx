@@ -35,21 +35,11 @@ const Flashcard = ({ text, progress, onNext, onPrev }) => {
 
     flashcard.addEventListener("mousemove", handleMove);
     flashcard.addEventListener("mouseout", resetTransform);
-    // flashcard.addEventListener("mousedown", () => {
-    //   flashcard.style.transform =
-    //     "perspective(500px) scale(0.9) rotateX(0) rotateY(0)";
-    // });
-    // flashcard.addEventListener("mouseup", () => {
-    //   flashcard.style.transform =
-    //     "perspective(500px) scale(1.1) rotateX(0) rotateY(0)";
-    // });
     flashcard.addEventListener("click", handleClick);
 
     return () => {
       flashcard.removeEventListener("mousemove", handleMove);
       flashcard.removeEventListener("mouseout", resetTransform);
-      // flashcard.removeEventListener("mousedown", resetTransform);
-      // flashcard.removeEventListener("mouseup", resetTransform);
       flashcard.removeEventListener("click", handleClick);
     };
   }, [onNext, onPrev]);
