@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { HomeIcon } from '@heroicons/react/outline'; 
 
+
 const Navbar = () => {
   return (
     <div className="w-full h-[38px] bg-black bg-opacity-90 p-2">
