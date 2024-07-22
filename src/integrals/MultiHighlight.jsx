@@ -108,7 +108,7 @@ const MultiHighlight = () => {
           </button>
         </div>
 
-        <div className="flex flex-wrap">
+        <div className="overflow-y-auto flex flex-wrap">
           {words.map((word) => (
             <span
               key={word.text}

@@ -11,6 +11,7 @@ const initialColors = [
   "rose",
   "teal",
 ];
+
 chrome.storage.local.set({ highlightedWords: [], availableColors: initialColors, 
             chatInputValue: "", chatResponseValue: "", chatWasSubmitted: false,
             summaryInputValue: "", summaryResponseValue:"", summaryWasSubmitted: false});
