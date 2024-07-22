@@ -1,3 +1,11 @@
+## Backend Architecture
+
+![Screenshot 2024-07-23 at 2 21 57 AM](https://github.com/user-attachments/assets/96eec629-accd-44d9-b0ba-59b755a83f8c)
+
+## Overall Architecture
+
+![PNG image](https://github.com/user-attachments/assets/4fd56624-5742-4edd-9bfa-4c35db3786af)
+
 ## Inspiration
 The inspiration behind ***"WebAssist"*** stemmed from our own frustrations and those of our peers when navigating through excessively long webpages filled with dense text. For someone who often needs to conduct thorough research, the process of sifting through these walls of text ends up being incredibly draining and time-consuming. It became evident that this inefficiency was not only affecting us but also our classmates, who struggled to extract relevant information for academic purposes due to the sheer volume of content. Additionally, making inferences from the content and identifying the most relevant parts to copy and paste into a smart assistant like ChatGPT before typing in queries was a cumbersome task. This process was further complicated by the context window limit of such assistants, which often meant having to repeatedly sift through text and condense it manually. 
 
