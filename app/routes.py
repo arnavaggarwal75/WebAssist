@@ -38,6 +38,7 @@ def setup_routes(app):
         question = data.get('question')
         if content:
             save_content(content)
+            # answer = answer_question2(content ,question)
             answer = answer_question(question)
             return jsonify(answer)
         else:
