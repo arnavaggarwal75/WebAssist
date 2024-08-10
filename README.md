@@ -90,7 +90,7 @@ The LangChain model is used for our natural language processing tasks.
 ### - Overall Workflow
 
 **1. User Interaction** 
-When a user interacts with the extension (e.g., clicking the extension icon, entering input in the popup), the following sequence of actions is triggered:
+When a user interacts with the extension (e.g., clicking the extension icon, entering input in the popup), the following sequence of actions is triggered: 
 
 **2. Frontend to Content Script** 
 The React app sends a message to the content script using `chrome.tabs.sendMessage`. The content script listens for these messages and performs actions such as retrieving webpage text, highlighting text, or unhighlighting text.
