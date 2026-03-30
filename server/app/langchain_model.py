@@ -13,7 +13,6 @@ from langchain.prompts import PromptTemplate
 from langchain.chains.combine_documents.stuff import StuffDocumentsChain
 from langchain.chains.llm import LLMChain
 
-
 # Load environment variables
 _ = load_dotenv(find_dotenv())
 openai_api_key = os.getenv("OPENAI_API_KEY")
@@ -85,52 +84,6 @@ def flashcards():
     points_list = parsed_output.points
     return [item.rstrip(".") for item in points_list]
 
-class ImpLines(BaseModel):
-    lines: List[str] = Field(
-        description="List of important lines"
-    )
-
-def extract_important_lines():
-    document = load_doc()
-
-    my_parser = PydanticOutputParser(
-        pydantic_object=ImpLines
-    )
-
-    # Define prompt
-    prompt_template = """
-    Identify the important lines in the following text that capture the main 
-    idea and flow of the content. Start from the beginning of the text 
-    and ensure that the lines are returned exactly as they appear in the 
-    text, without any changes, including punctuation and spacing. 
-    The selected lines should be scattered throughout the text to 
-    provide a coherent summary that allows a reader to skim through the 
-    content and understand the key points and overall narrative. Aim to 
-    select lines from different sections of the text in a sequential 
-    order to maintain a comprehensive overview.
-    If there are quotes within the text, escape it with the backslash. 
-
-    "{text}" 
-
-    {format_instructions}
-    """
-    my_prompt = PromptTemplate(
-        template=prompt_template,
-        partial_variables={
-            "format_instructions": my_parser.get_format_instructions()
-        }
-    )
-
-    llm_chain = LLMChain(llm=llm, prompt=my_prompt)
-
-    # Define StuffDocumentsChain
-    stuff_chain = StuffDocumentsChain(llm_chain=llm_chain, document_variable_name="text")
-
-    output = stuff_chain.invoke(document)
-    parsed_output = my_parser.parse(output["output_text"])
-    lines_list = parsed_output.lines
-    return lines_list
-
 def answer_question(ques):
     document = load_doc()
     
@@ -156,71 +109,50 @@ def answer_question(ques):
     Answer the following question with reference to the this document:
     {ques}'''))["result"]
 
+# Old function used for skim feature
 
-# Testing the functions
-# print("Summary:")
-# print(summarize_content(100))  
-
-# print("\nFlashcards:")
-# for item in flashcards():
-#      print(item)
-
-# print("Impoortant Lines:")
-# for line in extract_important_lines():
-#     print(line)
-
-# print("\nAnswer Question:")
-# print(answer_question("How does the OED define a mummy?"))
-
-
-# import nltk
-# from nltk.tokenize import sent_tokenize
-# # Ensure nltk punkt tokenizer is downloaded
-# nltk.download('punkt')
-
-# def sentence_aware_chunking(input_text, max_len):
-#     sentences = sent_tokenize(input_text)
-#     chunks = []
-#     current_chunk = []
-#     current_len = 0
-
-#     for sentence in sentences:
-#         if current_len + len(sentence) > max_len:
-#             chunks.append(' '.join(current_chunk))
-#             current_chunk = [sentence]
-#             current_len = len(sentence)
-#         else:
-#             current_chunk.append(sentence)
-#             current_len += len(sentence)
-
-#     if current_chunk:
-#         chunks.append(' '.join(current_chunk))
-    
-#     return chunks
-
-# def answer_question2(text, ques):
-#     # Split the document into sentence-aware chunks
-#     chunks = sentence_aware_chunking(text, 1600)
-#     print(f"Document split into {len(chunks)} chunks")
-#     for i, chunk in enumerate(chunks):
-#         print(f"Chunk {i+1}: {chunk}...") 
-
-
-#     # Perform embedding using FAISS
-#     embeddings = OpenAIEmbeddings()
-#     vector_db = FAISS.from_texts(chunks, embeddings)
-
-#     QA_chain = RetrievalQA.from_chain_type(
-#         llm=llm,
-#         chain_type="stuff",
-#         retriever=vector_db.as_retriever()
+# class ImpLines(BaseModel):
+#     lines: List[str] = Field(
+#         description="List of important lines"
 #     )
 
-#     result = QA_chain.invoke(f'''
-#     Answer the following question with reference to this document:
-#     {ques}''')
+# def extract_important_lines():
+#     document = load_doc()
 
-#     return result["result"]
+#     my_parser = PydanticOutputParser(
+#         pydantic_object=ImpLines
+#     )
 
-# # Example usage for testing
-# # print(answer_question("How does the OED define a mummy?"))
+#     # Define prompt
+#     prompt_template = """
+#     Identify the important lines in the following text that capture the main 
+#     idea and flow of the content. Start from the beginning of the text 
+#     and ensure that the lines are returned exactly as they appear in the 
+#     text, without any changes, including punctuation and spacing. 
+#     The selected lines should be scattered throughout the text to 
+#     provide a coherent summary that allows a reader to skim through the 
+#     content and understand the key points and overall narrative. Aim to 
+#     select lines from different sections of the text in a sequential 
+#     order to maintain a comprehensive overview.
+#     If there are quotes within the text, escape it with the backslash. 
+
+#     "{text}" 
+
+#     {format_instructions}
+#     """
+#     my_prompt = PromptTemplate(
+#         template=prompt_template,
+#         partial_variables={
+#             "format_instructions": my_parser.get_format_instructions()
+#         }
+#     )
+
+#     llm_chain = LLMChain(llm=llm, prompt=my_prompt)
+
+#     # Define StuffDocumentsChain
+#     stuff_chain = StuffDocumentsChain(llm_chain=llm_chain, document_variable_name="text")
+
+#     output = stuff_chain.invoke(document)
+#     parsed_output = my_parser.parse(output["output_text"])
+#     lines_list = parsed_output.lines
+#     return lines_list
